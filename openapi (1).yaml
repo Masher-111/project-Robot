@@ -1,0 +1,398 @@
+openapi: 3.0.0
+info: 
+  title: Cloud service of the robot-cleaner
+  version: 0.0.1
+servers: 
+  - url: http://localhost:8080/api/v1/
+    description: Dev server
+paths:
+  /robots:
+    get:
+      summary: method for getting a list of robots
+      tags:
+        - Robots
+      operationId: getAllRobot
+      responses:
+        '200':
+           description: successful response with a list of robots
+           content:
+             adplication/json:
+              schema:
+               $ref: "#/components/schemas/Robots"
+        'default': 
+          description: всё нестандартное
+          content:
+             adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: method of adding a robot
+      tags:
+        - Robots
+      operationId: addRobot
+      requestBody: 
+        required: true
+        content:
+          adplication/json:
+            schema:
+              $ref: "#/components/schemas/Robot"
+      responses:
+        '201':
+          description: robot added successfully
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Robot"
+        'default':
+          description: Other error
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /robot/{id_robot}:
+    get:
+      summary: find robot by ID
+      tags:
+        - Robots
+      operationId: getRobotById
+      parameters:
+        - name: id_robot
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 102b615
+      responses:
+        '200':
+           description: successful response
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Robot"
+        'default':
+           description: Other error
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+    
+    delete:
+      summary: deletes a robot
+      tags: 
+        - Robots
+      operationId: deleteRobotById
+      parameters:
+       - name: id_robot
+         in: path
+         required: true
+         schema:
+           type: integer
+         example: 102b615
+      responses:
+        '200':
+           description: robot is deleted
+           content:
+             adplication/json: {}
+        'default':
+           description: Other errors
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+  /users:
+    get:
+      summary: list of users
+      tags:
+        - Users
+      operationId: getAllUsers
+      responses:
+        '200':
+           description: successful response
+           content:
+             adplication/json:
+              schema:
+               $ref: "#/components/schemas/Users"
+        'default': 
+          description: Other errors
+          content:
+             adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: create user
+      tags:
+        - Users
+      operationId: createUser
+      requestBody: 
+        required: true
+        content:
+          adplication/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        'default':
+          description: Other errors
+  /user/{id_user}:
+    get:
+      summary: get user by ID
+      tags:
+        - Users
+      operationId: getUserById
+      parameters:
+        - name: id_user
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 102b615
+      responses:
+        '200':
+           description: successful response
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/User"
+        'default':
+           description: Other errors
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete user by ID
+      tags: 
+        - Users
+      operationId: deleteUserById
+      parameters:
+       - name: id_user
+         in: path
+         required: true
+         schema:
+           type: integer
+         example: 102b615
+      responses:
+        '200':
+           description: successful response
+           content:
+             adplication/json: {}
+        'default':
+           description: Other errors
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+  /shedule:
+    post:
+      summary: create shedule
+      tags:
+        - Shedule
+      operationId: createShedule
+      requestBody: 
+        required: true
+        content:
+          adplication/json:
+            schema:
+              $ref: "#/components/schemas/Shedule"
+      responses:
+        '201':
+          description: Shedule created successfully
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Shedule"
+        'default':
+          description: Other errors
+  /shedule/{id_robot}:
+    get:
+      summary: find shedule by robot ID
+      tags:
+        - Shedule
+      operationId: getSheduleByRobotId
+      parameters:
+        - name: id_robot
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 102b615
+      responses:
+        '200':
+           description: the schedule was displayed successfully
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Shedule"
+        'default':
+           description: Other errors
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+    delete:
+      summary: delete shedule by robot ID
+      tags: 
+        - Shedule
+      operationId: deleteSheduleByRobotId
+      parameters:
+       - name: id_robot
+         in: path
+         required: true
+         schema:
+           type: integer
+         example: 102b615
+      responses:
+        '200':
+           description: successful response
+           content:
+             adplication/json: {}
+        'default':
+           description: Other errors
+           content:
+             adplication/json:
+               schema:
+                 $ref: "#/components/schemas/Error"
+components: 
+  schemas:
+    Robot:
+      type: object
+      required:
+        - id_robot
+        - model
+        - version
+        - status
+        - resource
+        - remark
+        - ip_address
+        - id_group
+      properties:
+        id_robot:
+          type: integer
+          example: 112233
+        model:
+          type: string
+          example: DarkSide2
+        version:
+          type: string
+          example: v1.1.01
+        status:
+          type: string
+          enum:
+            - charging
+            - on_sation
+            - cleaning
+            - lost
+        resource:
+          type: string
+          example: 30%
+          description: degree of wear of robot
+        remark:
+          type: string
+          example: kitchen
+        ip_address:
+          type: string
+          example: 192.168.0.134
+        id_group:
+          type: integer
+          example: 01234
+    Robots:
+      type: array
+      items:
+        $ref: "#/components/schemas/Robot" 
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    User:
+      type: object
+      required:
+        - id_user
+        - userName
+        - hash
+        - email
+        - question
+      properties:
+        id_user:
+          type: integer
+          example: 12324
+        userName:
+          type: string
+          example: MyName
+        hash:
+          type: string
+          example: $S$C33783772bRXEx1aCsvY.dqgaaSu76XmVlKrW9Qu8IQlvxHlmzLf
+        email:
+          type: string
+          example: my_mail@email.com
+        clientStatus:
+          type: string
+          enum:
+            - logIn
+            - logOut
+        question:
+          type: string
+          example: my secret question  
+    Users:
+      type: array
+      items:
+          $ref: "#/components/schemas/User" 
+    Shedule:
+      type: object
+      required:
+        - time_start
+        - duration
+        - days
+        - power_level
+        - wet_cleaning
+        - level_wet-cleaning
+        - id_robot
+      properties:
+        time_start:
+          type: number
+          example: 21.00
+        duration:
+          type: string
+          enum:
+            - 30 minutes
+            - 60 minutes
+            - 90 minutes
+            - 120 minutes
+        days:
+          type: string
+          enum:
+            - Monday
+            - Tuesday
+            - Wednesday
+            - Thursday
+            - Friday
+            - Saturday
+            - Sunday
+        power_level:
+          type: string
+          enum:
+            - minimal
+            - normal
+            - turbo
+        wet_cleaning:
+          type: boolean
+        wet_cleaning_level:
+          type: string
+          enum:
+            - minimal
+            - normal
+            - turbo
+        id_robot:
+          $ref: "#/components/schemas/Robot"
+    
+      
